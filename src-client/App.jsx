@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import PostsContainer from './components/posts/posts-container';
+import ProjectsContainer from './components/projects/projects-container';
 import SignIn from './components/auth/sign-in';
 import SignUp from './components/auth/sign-up';
 import Header from './components/header';
@@ -40,7 +40,7 @@ const App = ({ store }) => {
         </p>
         <div className="container">
           <div>
-            <PrivateRoute exact path="/" component={PostsContainer} />
+            <PrivateRoute exact path="/" component={ProjectsContainer} />
             <Route path="/sign_in" component={SignIn} />
             <Route path="/sign_up" component={SignUp} />
           </div>

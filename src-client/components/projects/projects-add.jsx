@@ -3,24 +3,24 @@ import PropTypes from 'prop-types';
 
 import API from '../../api/api';
 
-class PostAdd extends React.Component {
+class ProjectAdd extends React.Component {
   constructor(props) {
     const obj1 = { title: '', content: '' };
 
     super(props);
-    this.state = { post: obj1, editMode: false };
-    this.handleAddPost = this.handleAddPost.bind(this);
+    this.state = { project: obj1, editMode: false };
+    this.handleAddProject = this.handleAddProject.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.updateAction = this.updateAction.bind(this);
   }
 
-  handleAddPost(event) {
+  handleAddProject(event) {
     event.preventDefault();
-    const { editMode, post } = this.state;
+    const { editMode, project } = this.state;
     const { refreshTable } = this.props;
-    if (!post) return;
+    if (!project) return;
     if (editMode) {
-      API.put(`/api/posts/${post.id}`, post)
+      API.put(`/api/projects/${project.id}`, project)
         .then((res) => {
           refreshTable();
           console.log(res);
@@ -29,7 +29,7 @@ class PostAdd extends React.Component {
           console.log(error);
         });
     } else {
-      API.post('api/posts', post)
+      API.post('api/projects', project)
         .then((res) => {
           refreshTable();
           console.log(res);
@@ -41,25 +41,25 @@ class PostAdd extends React.Component {
   }
 
   handleChange(event) {
-    const { post } = this.state;
-    post[event.target.id] = event.target.value;
-    this.setState({ post });
+    const { project } = this.state;
+    project[event.target.id] = event.target.value;
+    this.setState({ project });
   }
 
-  updateAction(post) {
-    if (post) {
-      this.setState({ post, editMode: true });
+  updateAction(project) {
+    if (project) {
+      this.setState({ project, editMode: true });
     } else {
-      this.setState({ post: { title: '', content: '' }, editMode: false });
+      this.setState({ project: { title: '', content: '' }, editMode: false });
     }
   }
 
   render() {
-    const { editMode, post } = this.state;
+    const { editMode, project } = this.state;
     return (
       <div className="card text-left mb-3">
         <div className="card-body">
-          <form onSubmit={this.handleAddPost}>
+          <form onSubmit={this.handleAddProject}>
             <div className="form-group">
               <label htmlFor="title">
                 Title
@@ -71,7 +71,7 @@ class PostAdd extends React.Component {
                 aria-describedby="title"
                 placeholder="Enter title"
                 onChange={this.handleChange}
-                value={post.title}
+                value={project.title}
               />
             </div>
 
@@ -79,7 +79,7 @@ class PostAdd extends React.Component {
               <label htmlFor="content">
                 Content
               </label>
-              <textarea className="form-control" id="content" placeholder="content" onChange={this.handleChange} value={post.content} />
+              <textarea className="form-control" id="content" placeholder="content" onChange={this.handleChange} value={project.content} />
             </div>
 
             <div className="btn-group" role="group" aria-label="">
@@ -100,7 +100,7 @@ class PostAdd extends React.Component {
   }
 }
 
-PostAdd.propTypes = {
+ProjectAdd.propTypes = {
   refreshTable: PropTypes.func.isRequired
 };
-export default PostAdd;
+export default ProjectAdd;

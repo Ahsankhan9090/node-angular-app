@@ -3,32 +3,32 @@ import PropTypes from 'prop-types';
 
 import API from '../../api/api';
 
-class PostTable extends React.Component {
+class ProjectTable extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { posts: [], filter: '' };
-    this.handleEditPost = this.handleEditPost.bind(this);
-    this.handleRemovePost = this.handleRemovePost.bind(this);
-    this.fetchPosts = this.fetchPosts.bind(this);
+    this.state = { projects: [], filter: '' };
+    this.handleEditProject = this.handleEditProject.bind(this);
+    this.handleRemoveProject = this.handleRemoveProject.bind(this);
+    this.fetchProjects = this.fetchProjects.bind(this);
     this.getByID = this.getByID.bind(this);
     this.handleChange = this.handleChange.bind(this);
     if (process.env.NODE_ENV === 'test') return;
     // Continue initialization for non-test environments
-    this.fetchPosts();
+    this.fetchProjects();
   }
 
-  handleEditPost(event, id) {
+  handleEditProject(event, id) {
     event.preventDefault();
     const { sendToEdit } = this.props;
-    const { posts } = this.state;
-    sendToEdit(posts.find((p) => p.id === id));
+    const { projects } = this.state;
+    sendToEdit(projects.find((p) => p.id === id));
   }
 
-  handleRemovePost(event, id) {
+  handleRemoveProject(event, id) {
     event.preventDefault();
-    API.delete(`/api/posts/${id}`)
+    API.delete(`/api/projects/${id}`)
       .then(() => {
-        this.fetchPosts();
+        this.fetchProjects();
       })
       .catch((error) => {
         console.log(error);
@@ -40,26 +40,26 @@ class PostTable extends React.Component {
     const targetValue = event.target.value;
     this.setState({ filter: event.target.value }, () => {
       if (targetValue) vm.getByID();
-      else vm.fetchPosts();
+      else vm.fetchProjects();
     });
   }
 
   getByID() {
     const { filter } = this.state;
     console.log(filter);
-    API.get(`/api/posts/${filter}`)
+    API.get(`/api/projects/${filter}`)
       .then((res) => {
-        if (res.data) this.setState({ posts: [res.data] });
+        if (res.data) this.setState({ projects: [res.data] });
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  fetchPosts() {
-    API.get('/api/posts')
+  fetchProjects() {
+    API.get('/api/projects')
       .then((res) => {
-        this.setState({ posts: res.data });
+        this.setState({ projects: res.data });
       })
       .catch((error) => {
         console.log(error);
@@ -67,8 +67,8 @@ class PostTable extends React.Component {
   }
 
   render() {
-    const { posts, filter } = this.state;
-    const listItems = posts.map((item) => (
+    const { projects, filter } = this.state;
+    const listItems = projects.map((item) => (
       <tr key={item.id}>
         <th scope="row">
           {item.id}
@@ -77,17 +77,17 @@ class PostTable extends React.Component {
           {item.title}
         </td>
         <td>
-          {item.author}
+          {item.owner}
         </td>
         <td>
-          {item.content}
+          {item.description}
         </td>
         <td>
           <div className="btn-group" role="group" aria-label="">
-            <button type="button" className="btn btn-warning" onClick={(e) => this.handleEditPost(e, item.id)}>
+            <button type="button" className="btn btn-warning" onClick={(e) => this.handleEditProject(e, item.id)}>
               Edit
             </button>
-            <button type="button" className="btn btn-danger" onClick={(e) => this.handleRemovePost(e, item.id)}>
+            <button type="button" className="btn btn-danger" onClick={(e) => this.handleRemoveProject(e, item.id)}>
               Remove
             </button>
           </div>
@@ -116,10 +116,10 @@ class PostTable extends React.Component {
                   Title
                 </th>
                 <th scope="col">
-                  Author
+                  Owner
                 </th>
                 <th scope="col">
-                  Content
+                  Description
                 </th>
                 <th scope="col">
                   Actions
@@ -136,8 +136,8 @@ class PostTable extends React.Component {
   }
 }
 
-PostTable.propTypes = {
+ProjectTable.propTypes = {
   sendToEdit: PropTypes.func.isRequired,
 };
 
-export default PostTable;
+export default ProjectTable;
