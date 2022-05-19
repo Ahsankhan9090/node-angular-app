@@ -5,7 +5,7 @@ import API from '../../api/api';
 
 class ProjectAdd extends React.Component {
   constructor(props) {
-    const obj1 = { title: '', content: '' };
+    const obj1 = { title: '', description: '' };
 
     super(props);
     this.state = { project: obj1, editMode: false };
@@ -50,7 +50,7 @@ class ProjectAdd extends React.Component {
     if (project) {
       this.setState({ project, editMode: true });
     } else {
-      this.setState({ project: { title: '', content: '' }, editMode: false });
+      this.setState({ project: { title: '', description: '' }, editMode: false });
     }
   }
 
@@ -76,10 +76,10 @@ class ProjectAdd extends React.Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="content">
-                Content
+              <label htmlFor="description">
+                Description
               </label>
-              <textarea className="form-control" id="content" placeholder="content" onChange={this.handleChange} value={project.content} />
+              <textarea className="form-control" id="description" placeholder="description" onChange={this.handleChange} value={project.description} />
             </div>
 
             <div className="btn-group" role="group" aria-label="">
