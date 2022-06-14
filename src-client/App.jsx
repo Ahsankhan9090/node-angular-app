@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import AuditContainer from './components/audits/audits-container';
 import ProjectsContainer from './components/projects/projects-container';
+import SettingsContainer from './components/settings/settings-container';
 import SignIn from './components/auth/sign-in';
 import SignUp from './components/auth/sign-up';
 import Header from './components/header';
@@ -43,6 +44,7 @@ const App = ({ store }) => {
           <div>
             <PrivateRoute exact path="/" component={ProjectsContainer} />
             <PrivateRoute exact path="/audits" component={AuditContainer} />
+            <PrivateRoute exact path="/settings" component={SettingsContainer} />
             <Route path="/sign_in" component={SignIn} />
             <Route path="/sign_up" component={SignUp} />
           </div>
