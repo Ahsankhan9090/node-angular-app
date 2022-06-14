@@ -72,6 +72,26 @@ class AuditTable extends React.Component {
     );
   }
 
+  renderTableFilters() {
+    const { audits } = this.state;
+    console.log('audits: ', audits);
+    return (
+      <div className="input-group">
+        <div className="input-group-prepend">
+          <div className="input-group-text">
+            Description
+          </div>
+        </div>
+        <input
+          type="text"
+          className="form-control"
+          aria-label="Filter description"
+          aria-describedby="filter-description"
+        />
+      </div>
+    );
+  }
+
   render() {
     const { audits, pagination } = this.state;
 
@@ -94,13 +114,8 @@ class AuditTable extends React.Component {
     return (
       <div className="card">
         <div className="card-body">
-          <div className="input-group">
-            <div className="input-group-prepend">
-              <span className="input-group-text" id="basic-addon1">
-                Filter
-              </span>
-            </div>
-          </div>
+
+          {this.renderTableFilters()}
 
           {this.renderPagination()}
 
