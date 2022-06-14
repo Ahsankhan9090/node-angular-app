@@ -11,8 +11,12 @@ class AuditTable extends React.Component {
         currentPage: 1,
         perPage: 10,
       },
+      filters: {
+        message: '',
+      }
     };
     this.fetchAudits = this.fetchAudits.bind(this);
+    this.handleFilterMessageChange = this.handleFilterMessageChange.bind(this);
     if (process.env.NODE_ENV === 'test') return;
     // Continue initialization for non-test environments
     this.fetchAudits();
@@ -28,8 +32,21 @@ class AuditTable extends React.Component {
     });
   }
 
+  handleFilterMessageChange(e) {
+    this.setState({
+      filters: {
+        message: e.target.value
+      }
+    });
+  }
+
   fetchAudits() {
-    API.get('/api/audits')
+    const { filters } = this.state;
+    API.post('/api/audits', {
+      q: {
+        filters
+      }
+    })
       .then((res) => {
         this.setState({ audits: res.data });
       })
@@ -72,22 +89,29 @@ class AuditTable extends React.Component {
     );
   }
 
-  renderTableFilters() {
-    const { audits } = this.state;
-    console.log('audits: ', audits);
+  renderFilters() {
     return (
-      <div className="input-group">
-        <div className="input-group-prepend">
-          <div className="input-group-text">
-            Description
+      <div>
+        <div className="input-group">
+          <div className="input-group-prepend">
+            <div className="input-group-text">
+              Message
+            </div>
           </div>
+          <input
+            type="text"
+            className="form-control"
+            aria-label="Filter message"
+            aria-describedby="filter-message"
+            onChange={this.handleFilterMessageChange}
+          />
         </div>
-        <input
-          type="text"
-          className="form-control"
-          aria-label="Filter description"
-          aria-describedby="filter-description"
-        />
+        <button
+          type="button"
+          onClick={this.fetchAudits}
+        >
+          Submit
+        </button>
       </div>
     );
   }
@@ -115,7 +139,7 @@ class AuditTable extends React.Component {
       <div className="card">
         <div className="card-body">
 
-          {this.renderTableFilters()}
+          {this.renderFilters()}
 
           {this.renderPagination()}
 

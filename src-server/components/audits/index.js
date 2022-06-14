@@ -3,9 +3,10 @@ module.exports = (app) => {
   const module = {};
 
   // Get all
-  module.get = async () => db.query(`
+  module.get = async (filters) => db.query(`
     SELECT *
     FROM audits
+    WHERE message ILIKE '%${filters.message}%'
   `);
 
   return module;

@@ -7,8 +7,8 @@ module.exports = (app) => {
   const audits = Audits(app);
 
   // Get all
-  router.get('/', auth.authenticate, async (req, res) => {
-    const data = await audits.get();
+  router.post('/', auth.authenticate, async (req, res) => {
+    const data = await audits.get(req.body.q.filters);
     res.json(data);
   });
 
