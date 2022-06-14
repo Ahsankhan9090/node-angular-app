@@ -1,6 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+import API from '../../api/api';
+
+const useFetch = (url) => {
+  const [settings, setSettings] = useState({});
+  const isLoaded = useRef(false);
+
+  const fetchSettings = async () => {
+    console.log('Fetching settings');
+    const response = await API.get(url);
+    /* eslint-disable no-debugger */
+    // debugger;
+    const { data } = response;
+    /* eslint-disable camelcase */
+    const dailyEmailUpdates = data[0].daily_email_updates;
+    setSettings({ daily_email_updates: dailyEmailUpdates });
+    isLoaded.current = true;
+  };
+
+  const updateSettings = async () => {
+    if (isLoaded.current) {
+      console.log('Updating settings: ', settings);
+      await API.put(`${url}/daily_email_updates`, {
+        value: settings.daily_email_updates,
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  useEffect(() => {
+    updateSettings();
+  }, [settings]);
+
+  return { settings, setSettings };
+};
 
 export default function SettingsContainer() {
+  const { settings, setSettings } = useFetch('/api/settings');
+
   return (
     <div className="container">
       <nav aria-label="breadcrumb" className="main-breadcrumb">
@@ -64,7 +104,15 @@ export default function SettingsContainer() {
                         <li className="list-group-item has-icon">
                           Daily email updates
                           <div className="custom-control custom-control-nolabel custom-switch ml-auto">
-                            <input type="checkbox" className="custom-control-input" id="customSwitch1" />
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id="customSwitch1"
+                              checked={!!settings.daily_email_updates}
+                              onChange={() => setSettings({
+                                daily_email_updates: !settings.daily_email_updates
+                              })}
+                            />
                             <label className="custom-control-label" htmlFor="customSwitch1" />
                           </div>
                         </li>
