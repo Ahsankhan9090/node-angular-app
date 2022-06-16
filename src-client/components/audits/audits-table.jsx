@@ -17,6 +17,7 @@ class AuditTable extends React.Component {
     };
     this.fetchAudits = this.fetchAudits.bind(this);
     this.handleFilterMessageChange = this.handleFilterMessageChange.bind(this);
+    this.handleFilterStatusChange = this.handleFilterStatusChange.bind(this);
     if (process.env.NODE_ENV === 'test') return;
     // Continue initialization for non-test environments
     this.fetchAudits();
@@ -50,6 +51,14 @@ class AuditTable extends React.Component {
     this.setState({
       filters: {
         message: e.target.value
+      }
+    });
+  }
+
+  handleFilterStatusChange(e) {
+    this.setState({
+      filters: {
+        status: e.target.value
       }
     });
   }
@@ -120,6 +129,25 @@ class AuditTable extends React.Component {
             onChange={this.handleFilterMessageChange}
           />
         </div>
+
+        <div className="input-group">
+          <div className="input-group-prepend">
+            <div className="input-group-text">
+              Status
+            </div>
+          </div>
+          <select
+            className="form-control"
+            aria-label="Filter status"
+            onChange={this.handleFilterStatusChange}
+          >
+            <option value="started">Started</option>
+            <option value="in progress">In progress</option>
+            <option value="finished">Finished</option>
+            <option value="error">Error</option>
+          </select>
+        </div>
+
         <button
           type="button"
           onClick={this.fetchAudits}
