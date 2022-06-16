@@ -14,18 +14,32 @@ const useFetch = (url) => {
     const { data } = response;
     /* eslint-disable camelcase */
     let dailyEmailUpdates;
+    let auditTableDefaultRows;
     if (data[0]) {
       dailyEmailUpdates = data[0].daily_email_updates;
+      auditTableDefaultRows = data[0].audit_table_default_rows;
     }
-    setSettings({ daily_email_updates: dailyEmailUpdates });
+    setSettings({
+      daily_email_updates: dailyEmailUpdates,
+      audit_table_default_rows: auditTableDefaultRows,
+    });
     isLoaded.current = true;
   };
 
-  const updateSettings = async () => {
+  const updateDailyEmailSettings = async () => {
     if (isLoaded.current) {
       console.log('Updating settings: ', settings);
       await API.put(`${url}/daily_email_updates`, {
         value: settings.daily_email_updates,
+      });
+    }
+  };
+
+  const updateTableDefaultSettings = async () => {
+    if (isLoaded.current) {
+      console.log('Updating settings: ', settings);
+      await API.put(`${url}/audit_table_default_rows`, {
+        value: settings.audit_table_default_rows,
       });
     }
   };
@@ -35,7 +49,8 @@ const useFetch = (url) => {
   }, []);
 
   useEffect(() => {
-    updateSettings();
+    updateDailyEmailSettings();
+    updateTableDefaultSettings();
   }, [settings]);
 
   return { settings, setSettings };
@@ -113,11 +128,39 @@ export default function SettingsContainer() {
                               id="customSwitch1"
                               checked={!!settings.daily_email_updates}
                               onChange={() => setSettings({
+                                ...settings,
                                 daily_email_updates: !settings.daily_email_updates
                               })}
                             />
                             <label className="custom-control-label" htmlFor="customSwitch1" />
                           </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </form>
+                </div>
+
+                <hr />
+                <div className="mt-3">
+                  <h6>TABLE SETTINGS</h6>
+                  <form>
+                    <div className="form-group mb-0">
+                      <ul className="list-group list-group-sm">
+                        <li className="list-group-item">
+                          <label>
+                            Table default rows
+                            <div className="ml-auto">
+                              <input
+                                type="text"
+                                id="table-default-rows"
+                                value={settings.audit_table_default_rows}
+                                onChange={(e) => setSettings({
+                                  ...settings,
+                                  audit_table_default_rows: e.target.value
+                                })}
+                              />
+                            </div>
+                          </label>
                         </li>
                       </ul>
                     </div>
