@@ -8,7 +8,8 @@ module.exports = (app) => {
 
   // Get all
   router.post('/', auth.authenticate, async (req, res) => {
-    const data = await audits.get(req.body.q.filters);
+    const filters = (req.body.q && req.body.q.filters) || {};
+    const data = await audits.get(filters);
     res.json(data);
   });
 
