@@ -4,17 +4,20 @@ module.exports = (app) => {
 
   // Get all
   module.get = async (userId) => db.query(`
-    SELECT u.daily_email_updates AS daily_email_updates
-    FROM users u
-    WHERE u.id = $1
+    SELECT settings.*
+    FROM settings
+    WHERE settings.user_id = $1
   `, [userId]);
 
   // Update
   module.update = async (field, value, userId) => {
+    // Add a new setting row for the user if it doesn't exist.
+    // Otherwise, update the setting for the right user.
     db.query(`
-      UPDATE users
-      SET ${field}=$1
-      WHERE users.id=$2
+      INSERT INTO settings (${field}, user_id)
+      VALUES($1, $2)
+      ON CONFLICT (user_id) DO
+      UPDATE SET ${field}=$1 WHERE settings.user_id=$2
     `, [value, userId]);
   };
 
