@@ -11,7 +11,7 @@ module.exports = (app) => {
     const filterParts = [];
     if (filters.message) {
       filterParts.push(`message ILIKE '%${filters.message}%'`);
-    } else {
+    } else if (filters.status !== undefined) {
       filterParts.push(`status='${filters.status}'`);
     }
 
